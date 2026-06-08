@@ -1,0 +1,71 @@
+.details-hero { min-height: 78vh; display: grid; align-items: end; padding: calc(var(--header-height) + 4rem) clamp(1rem, 4vw, 4rem) 4rem; margin-top: calc(var(--header-height) * -1); background-size: cover; background-position: center; position: relative; isolation: isolate; }
+.details-hero::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(15,15,15,0.98), rgba(15,15,15,0.72), rgba(15,15,15,0.28)), linear-gradient(0deg, var(--black), transparent 46%); }
+.details-layout { display: grid; grid-template-columns: minmax(180px, 290px) minmax(0, 850px); gap: clamp(1rem, 4vw, 2.5rem); align-items: end; }
+.details-poster { border-radius: 1.2rem; box-shadow: var(--shadow); background: var(--surface-2); }
+.details-content h1 { margin-bottom: 0.7rem; }
+.details-meta { display: flex; flex-wrap: wrap; gap: 0.7rem; margin: 1rem 0; color: var(--muted); font-weight: 800; }
+.pill { display: inline-flex; align-items: center; min-height: 2rem; padding: 0.35rem 0.7rem; border-radius: 999px; background: rgba(255,255,255,0.1); border: 1px solid var(--line); }
+.details-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.4rem; }
+.details-section { padding: 2.2rem clamp(1rem, 4vw, 4rem); }
+.details-section p { color: #dedede; line-height: 1.8; }
+.cast-row { display: grid; grid-auto-flow: column; grid-auto-columns: 145px; gap: 1rem; overflow-x: auto; padding-bottom: 1rem; }
+.cast-card { border-radius: 1rem; overflow: hidden; background: var(--surface); }
+.cast-card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; background: var(--surface-2); }
+.cast-card div { padding: 0.75rem; }
+.cast-card strong { display: block; line-height: 1.2; }
+.cast-card span { display: block; color: var(--muted); font-size: 0.84rem; margin-top: 0.25rem; }
+.trailer-frame { width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: var(--radius); box-shadow: var(--shadow); background: #000; }
+.details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.9rem; margin-top: 1.2rem; }
+.fact { padding: 1rem; background: rgba(255,255,255,0.06); border: 1px solid var(--line); border-radius: 1rem; }
+.fact span { display: block; color: var(--muted); font-size: 0.82rem; margin-bottom: 0.2rem; }
+@media (max-width: 760px) { .details-layout { grid-template-columns: 1fr; } .details-poster { width: min(230px, 70vw); } .details-hero { padding-top: 12rem; } }
+
+/* Premium details page */
+.details-hero {
+  min-height: 86vh;
+  padding-top: calc(var(--header-height) + 5rem);
+}
+.details-hero::before {
+  background:
+    linear-gradient(90deg, rgba(8,8,8,0.98), rgba(15,15,15,0.78) 48%, rgba(15,15,15,0.20)),
+    radial-gradient(circle at 76% 18%, rgba(229,9,20,0.28), transparent 24rem),
+    linear-gradient(0deg, var(--black), transparent 48%);
+}
+.details-layout {
+  align-items: center;
+}
+.details-poster {
+  border: 1px solid rgba(255,255,255,0.16);
+  transform: rotate(-1.2deg);
+}
+.details-content {
+  padding: clamp(1.1rem, 3vw, 2rem);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: calc(var(--radius) + 8px);
+  background: linear-gradient(135deg, rgba(255,255,255,0.105), rgba(255,255,255,0.035));
+  box-shadow: 0 30px 90px rgba(0,0,0,0.34);
+  backdrop-filter: blur(14px);
+}
+.pill {
+  background: rgba(255,255,255,0.09);
+  backdrop-filter: blur(10px);
+}
+.pill--rating {
+  border-color: rgba(255, 209, 102, 0.38);
+  background: rgba(255, 209, 102, 0.10);
+}
+.details-stats { margin-bottom: 0.4rem; }
+.cast-card, .fact {
+  border: 1px solid rgba(255,255,255,0.09);
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.035));
+  box-shadow: 0 18px 55px rgba(0,0,0,0.26);
+}
+.cast-card img { transition: transform 0.35s ease, filter 0.35s ease; }
+.cast-card:hover img { transform: scale(1.05); filter: saturate(1.1); }
+.trailer-frame {
+  border: 1px solid rgba(255,255,255,0.12);
+}
+@media (max-width: 760px) {
+  .details-poster { transform: none; }
+  .details-hero { padding-top: 10rem; }
+}
