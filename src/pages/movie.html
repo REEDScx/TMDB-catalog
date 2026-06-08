@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Detalhes completos do filme no CineStream." />
+    <title>Detalhes do Filme | CineStream</title>
+    <link rel="preconnect" href="https://image.tmdb.org" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/details.css" />
+  </head>
+  <body>
+    <header class="site-header" data-header>
+      <a class="brand" href="../../index.html" aria-label="Página inicial CineStream">
+        <span class="brand__mark">C</span>
+        <span>CineStream</span>
+      </a>
+      <nav class="main-nav" aria-label="Navegação principal">
+        <a href="../../index.html#popular">Populares</a>
+        <a href="../../index.html#top-rated">Melhores</a>
+        <a href="favorites.html">Favoritos</a>
+      </nav>
+      <form class="search" role="search" data-search-form>
+        <label class="sr-only" for="movie-search">Pesquisar filmes</label>
+        <input id="movie-search" data-search-input type="search" placeholder="Buscar filmes..." autocomplete="off" />
+        <button type="submit" aria-label="Buscar">⌕</button>
+        <div class="search-results" data-search-results aria-live="polite"></div>
+      </form>
+    </header>
+
+    <main data-details-root>
+      <section class="details-hero skeleton" data-details-skeleton></section>
+    </main>
+
+    <button class="back-to-top" data-back-to-top aria-label="Voltar ao topo">↑</button>
+    <script type="module" src="../js/details.js"></script>
+  </body>
+</html>

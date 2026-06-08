@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Catálogo moderno de filmes com dados do TMDB." />
+    <title>CineStream | Catálogo TMDB</title>
+    <link rel="preconnect" href="https://image.tmdb.org" />
+    <link rel="stylesheet" href="src/css/style.css" />
+    <link rel="stylesheet" href="src/css/home.css" />
+  </head>
+  <body>
+    <header class="site-header" data-header>
+      <a class="brand" href="index.html" aria-label="Página inicial CineStream">
+        <span class="brand__mark">C</span>
+        <span>CineStream</span>
+      </a>
+
+      <nav class="main-nav" aria-label="Navegação principal">
+        <a href="#popular">Populares</a>
+        <a href="#top-rated">Melhores</a>
+        <a href="#upcoming">Lançamentos</a>
+        <a href="src/pages/favorites.html">Favoritos</a>
+      </nav>
+
+      <form class="search" role="search" data-search-form>
+        <label class="sr-only" for="movie-search">Pesquisar filmes</label>
+        <input id="movie-search" data-search-input type="search" placeholder="Buscar filmes..." autocomplete="off" />
+        <button type="submit" aria-label="Buscar">⌕</button>
+        <div class="search-results" data-search-results aria-live="polite"></div>
+      </form>
+    </header>
+
+    <main>
+      <section class="hero" data-hero aria-label="Banner principal">
+        <div class="hero__skeleton skeleton"></div>
+      </section>
+
+      <section id="popular" class="movie-section" data-section="popular">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Em alta</p>
+            <h2>Filmes Populares</h2>
+          </div>
+          <a href="#catalog" class="text-link">Explorar catálogo</a>
+        </div>
+        <div class="movie-row" data-row="popular"></div>
+      </section>
+
+      <section id="top-rated" class="movie-section" data-section="topRated">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Crítica e público</p>
+            <h2>Melhores Avaliados</h2>
+          </div>
+        </div>
+        <div class="movie-row" data-row="topRated"></div>
+      </section>
+
+      <section id="upcoming" class="movie-section" data-section="upcoming">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Em breve</p>
+            <h2>Lançamentos</h2>
+          </div>
+        </div>
+        <div class="movie-row" data-row="upcoming"></div>
+      </section>
+
+      <section id="now-playing" class="movie-section" data-section="nowPlaying">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Cinema</p>
+            <h2>Em Cartaz</h2>
+          </div>
+        </div>
+        <div class="movie-row" data-row="nowPlaying"></div>
+      </section>
+
+      <section id="catalog" class="movie-section catalog-section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Catálogo infinito</p>
+            <h2>Continue Descobrindo</h2>
+          </div>
+          <span class="muted" data-page-indicator>Página 1</span>
+        </div>
+        <div class="movie-grid" data-catalog-grid></div>
+        <div class="loader-sentinel" data-infinite-sentinel>
+          <span class="spinner" aria-hidden="true"></span>
+          <span>Carregando mais filmes...</span>
+        </div>
+      </section>
+    </main>
+
+    <button class="back-to-top" data-back-to-top aria-label="Voltar ao topo">↑</button>
+
+    <footer class="site-footer">
+      <p>Dados fornecidos por TMDB. Este projeto é uma demonstração independente.</p>
+      <button class="api-key-button" data-api-key-button>Configurar API Key</button>
+    </footer>
+
+    <script type="module" src="src/js/home.js"></script>
+  </body>
+</html>
