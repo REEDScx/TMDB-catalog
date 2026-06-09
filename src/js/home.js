@@ -2,6 +2,9 @@ import { detailUrl, formatRating, formatYear, hasApiKey, imageUrl, imageSizes, l
 import { initSearch } from "./search.js";
 import { setupChrome } from "./chrome.js";
 import { escapeHtml, movieCard } from "./ui.js";
+import { askForApiKey, detailUrl, formatRating, formatYear, hasApiKey, imageUrl, imageSizes, loadGenres, tmdb, toggleFavorite } from "./api.js";
+import { initSearch } from "./search.js";
+import { movieCard } from "./ui.js";
 
 const rows = {
   popular: document.querySelector('[data-row="popular"]'),
@@ -17,6 +20,7 @@ let hasMoreCatalog = true;
 const MAX_CATALOG_PAGES = 20;
 
 // Skeletons mantêm a interface estável enquanto a API responde.
+
 function createSkeletons(container, count = 8) {
   container.innerHTML = Array.from({ length: count }, () => `<div class="skeleton skeleton-card"></div>`).join("");
 }
@@ -60,6 +64,11 @@ async function loadHero() {
         <p class="hero__overview">${overview}</p>
         <div class="hero__actions">
           <a class="btn" href="${detailUrl(movie.id)}">Ver Detalhes</a>
+        <h1 class="hero__title">${movie.title}</h1>
+        <div class="hero__meta"><span>${formatYear(movie.release_date)}</span><span class="rating">★ ${formatRating(movie.vote_average)}</span></div>
+        <p class="hero__overview">${movie.overview || "Sinopse indisponível para este título."}</p>
+        <div class="hero__actions">
+          <a class="btn" href="${detailUrl(movie.id)}">Assistir Trailer</a>
           <button class="btn btn--ghost" data-hero-favorite>+ Favorito</button>
         </div>
       </div>
@@ -84,6 +93,7 @@ async function loadCatalog() {
     pageIndicator.textContent = `Página ${catalogPage}`;
     catalogPage += 1;
     hasMoreCatalog = catalogPage <= Math.min(data.total_pages || 1, MAX_CATALOG_PAGES);
+    hasMoreCatalog = catalogPage <= Math.min(data.total_pages || 1, 20);
   } catch (error) {
     if (!catalogGrid.children.length) renderError(catalogGrid, error);
     hasMoreCatalog = false;
@@ -99,6 +109,22 @@ function setupInfiniteScroll() {
     if (entries.some((entry) => entry.isIntersecting)) loadCatalog();
   }, { rootMargin: "500px" });
   if (sentinel) observer.observe(sentinel);
+  observer.observe(sentinel);
+}
+
+function setupChrome() {
+  const header = document.querySelector("[data-header]");
+  const topButton = document.querySelector("[data-back-to-top]");
+  const update = () => {
+    header.classList.toggle("is-scrolled", window.scrollY > 30);
+    topButton.classList.toggle("is-visible", window.scrollY > 600);
+  };
+  window.addEventListener("scroll", update, { passive: true });
+  topButton.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+  document.addEventListener("click", (event) => {
+    if (event.target.matches("[data-api-key-button]")) askForApiKey();
+  });
+  update();
 }
 
 async function init() {

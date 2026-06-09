@@ -2,8 +2,7 @@
    Details: página de filme com painel premium e mídia
    ========================================================= */
 .details-hero {
-  position: relative;
-  isolation: isolate;
+  position: relative;  isolation: isolate;
   display: grid;
   align-items: end;
   min-height: 86vh;

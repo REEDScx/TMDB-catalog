@@ -2,6 +2,7 @@ import { detailUrl, formatRating, formatYear, imageUrl, tmdb } from "./api.js";
 import { escapeHtml } from "./ui.js";
 
 // Evita chamadas à API a cada tecla e melhora a sensação de busca em tempo real.
+
 const debounce = (callback, delay = 350) => {
   let timeout;
   return (...args) => {
@@ -35,6 +36,13 @@ export function initSearch() {
         </a>
       `;
     }).join("");
+    results.innerHTML = movies.slice(0, 8).map((movie) => `
+      <a class="search-result" href="${detailUrl(movie.id)}">
+        <img src="${imageUrl(movie.poster_path, "w92")}" alt="Poster de ${movie.title}" loading="lazy">
+        <span><strong>${movie.title}</strong><span>${formatYear(movie.release_date)}</span></span>
+        <span class="rating">★ ${formatRating(movie.vote_average)}</span>
+      </a>
+    `).join("");
     results.classList.add("is-open");
   };
 
