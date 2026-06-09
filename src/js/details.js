@@ -1,9 +1,20 @@
+import { formatRating, formatRuntime, formatYear, imageUrl, imageSizes, isFavorite, loadGenres, tmdb, toggleFavorite } from "./api.js";
+import { initSearch } from "./search.js";
+import { setupChrome } from "./chrome.js";
+import { escapeHtml, movieCard } from "./ui.js";
 import { askForApiKey, detailUrl, formatRating, formatRuntime, formatYear, getGenreNames, imageUrl, imageSizes, isFavorite, loadGenres, tmdb, toggleFavorite } from "./api.js";
 import { initSearch } from "./search.js";
 
 const root = document.querySelector("[data-details-root]");
 const movieId = new URLSearchParams(window.location.search).get("id");
 
+// Reutiliza o mesmo card da home para manter as recomendações consistentes.
+function renderRecommendations(movies) {
+  if (!movies?.length) return `<p class="muted">Nenhuma recomendação encontrada.</p>`;
+  return `<div class="movie-row">${movies.slice(0, 14).map(movieCard).join("")}</div>`;
+}
+
+// Limita o elenco para preservar performance e leitura em telas menores.
 function setupChrome() {
   const header = document.querySelector("[data-header]");
   const topButton = document.querySelector("[data-back-to-top]");
@@ -38,12 +49,15 @@ function renderCast(cast) {
   if (!cast?.length) return `<p class="muted">Elenco indisponível.</p>`;
   return `<div class="cast-row">${cast.slice(0, 18).map((person) => `
     <article class="cast-card">
+      <img src="${imageUrl(person.profile_path, imageSizes.profile)}" alt="Foto de ${escapeHtml(person.name)}" loading="lazy">
+      <div><strong>${escapeHtml(person.name)}</strong><span>${escapeHtml(person.character || "Personagem não informado")}</span></div>
       <img src="${imageUrl(person.profile_path, imageSizes.profile)}" alt="Foto de ${person.name}" loading="lazy">
       <div><strong>${person.name}</strong><span>${person.character || "Personagem não informado"}</span></div>
     </article>
   `).join("")}</div>`;
 }
 
+// Prioriza trailers oficiais do YouTube; se não houver, usa o primeiro vídeo disponível.
 function findTrailer(videos) {
   return videos?.find((video) => video.site === "YouTube" && video.type === "Trailer") || videos?.find((video) => video.site === "YouTube");
 }
@@ -54,6 +68,13 @@ function shareMovie(movie) {
   return navigator.clipboard.writeText(window.location.href).then(() => alert("Link copiado para a área de transferência."));
 }
 
+/** Renderiza todos os blocos da página após carregar os dados principais em paralelo. */
+function render(movie, credits, videos, recommendations) {
+  const trailer = findTrailer(videos.results || []);
+  const favorite = isFavorite(movie.id);
+  const title = escapeHtml(movie.title || "Filme sem título");
+  const originalTitle = escapeHtml(movie.original_title || movie.title || "—");
+  const overview = escapeHtml(movie.overview || "Sinopse indisponível.");
 function render(movie, credits, videos, recommendations) {
   const trailer = findTrailer(videos.results || []);
   const favorite = isFavorite(movie.id);
@@ -61,6 +82,24 @@ function render(movie, credits, videos, recommendations) {
   root.innerHTML = `
     <section class="details-hero" style="background-image: url('${imageUrl(movie.backdrop_path, imageSizes.backdrop)}')">
       <div class="details-layout">
+        <img class="details-poster" src="${imageUrl(movie.poster_path)}" alt="Poster de ${title}">
+        <div class="details-content">
+          <p class="eyebrow">Experiência cinematográfica</p>
+          <h1>${title}</h1>
+          <p class="muted">Título original: ${originalTitle}</p>
+          <div class="details-meta">
+            <span class="pill">${formatYear(movie.release_date)}</span>
+            <span class="pill">${formatRuntime(movie.runtime)}</span>
+            <span class="pill pill--rating rating">★ ${formatRating(movie.vote_average)}</span>
+            <span class="pill">${movie.status || "—"}</span>
+          </div>
+          <div class="details-meta">${(movie.genres || []).map((genre) => `<span class="pill">${escapeHtml(genre.name)}</span>`).join("")}</div>
+          <p>${overview}</p>
+          <div class="hero__stats details-stats" aria-label="Resumo do filme">
+            <span><strong>${formatRating(movie.vote_average)}</strong>Nota TMDB</span>
+            <span><strong>${formatRuntime(movie.runtime)}</strong>Duração</span>
+            <span><strong>${movie.original_language?.toUpperCase() || "—"}</strong>Idioma</span>
+          </div>
         <img class="details-poster" src="${imageUrl(movie.poster_path)}" alt="Poster de ${movie.title}">
         <div class="details-content">
           <p class="eyebrow">Detalhes do filme</p>
@@ -97,6 +136,7 @@ function render(movie, credits, videos, recommendations) {
     <section class="details-section">
       <p class="eyebrow">Sinopse</p>
       <h2>Descrição completa</h2>
+      <p>${overview}</p>
       <p>${movie.overview || "Sinopse indisponível."}</p>
     </section>
 
@@ -109,6 +149,7 @@ function render(movie, credits, videos, recommendations) {
     <section id="trailer" class="details-section">
       <p class="eyebrow">Vídeo</p>
       <h2>Trailer</h2>
+      ${trailer ? `<iframe class="trailer-frame" src="https://www.youtube.com/embed/${encodeURIComponent(trailer.key)}" title="Trailer de ${title}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>` : `<p class="muted">Trailer indisponível.</p>`}
       ${trailer ? `<iframe class="trailer-frame" src="https://www.youtube.com/embed/${trailer.key}" title="Trailer de ${movie.title}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>` : `<p class="muted">Trailer indisponível.</p>`}
     </section>
 

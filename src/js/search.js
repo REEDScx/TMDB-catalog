@@ -1,4 +1,7 @@
 import { detailUrl, formatRating, formatYear, imageUrl, tmdb } from "./api.js";
+import { escapeHtml } from "./ui.js";
+
+// Evita chamadas à API a cada tecla e melhora a sensação de busca em tempo real.
 
 const debounce = (callback, delay = 350) => {
   let timeout;
@@ -8,12 +11,14 @@ const debounce = (callback, delay = 350) => {
   };
 };
 
+/** Inicializa a busca global usada no header de todas as páginas. */
 export function initSearch() {
   const form = document.querySelector("[data-search-form]");
   const input = document.querySelector("[data-search-input]");
   const results = document.querySelector("[data-search-results]");
   if (!form || !input || !results) return;
 
+  // Renderização isolada para facilitar manutenção dos estados da busca.
   const renderResults = (movies) => {
     if (!movies.length) {
       results.innerHTML = `<div class="empty-state">Nenhum filme encontrado.</div>`;
@@ -21,6 +26,16 @@ export function initSearch() {
       return;
     }
 
+    results.innerHTML = movies.slice(0, 8).map((movie) => {
+      const title = escapeHtml(movie.title || "Filme sem título");
+      return `
+        <a class="search-result" href="${detailUrl(movie.id)}">
+          <img src="${imageUrl(movie.poster_path, "w92")}" alt="Poster de ${title}" loading="lazy">
+          <span><strong>${title}</strong><span>${formatYear(movie.release_date)}</span></span>
+          <span class="rating">★ ${formatRating(movie.vote_average)}</span>
+        </a>
+      `;
+    }).join("");
     results.innerHTML = movies.slice(0, 8).map((movie) => `
       <a class="search-result" href="${detailUrl(movie.id)}">
         <img src="${imageUrl(movie.poster_path, "w92")}" alt="Poster de ${movie.title}" loading="lazy">

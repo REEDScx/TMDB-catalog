@@ -1,3 +1,9 @@
+import { getFavorites, loadGenres } from "./api.js";
+import { movieCard } from "./ui.js";
+import { initSearch } from "./search.js";
+import { setupChrome } from "./chrome.js";
+
+/** Renderiza os filmes salvos no navegador e mostra um estado vazio amigável. */
 import { askForApiKey, getFavorites, loadGenres } from "./api.js";
 import { movieCard } from "./ui.js";
 import { initSearch } from "./search.js";

@@ -6,10 +6,18 @@
     <meta name="description" content="Detalhes completos do filme no CineStream." />
     <title>Detalhes do Filme | CineStream</title>
     <link rel="preconnect" href="https://image.tmdb.org" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="../css/details.css" />
   </head>
   <body>
+    <div class="app-glow app-glow--one" aria-hidden="true"></div>
+    <div class="app-glow app-glow--two" aria-hidden="true"></div>
+    <header class="site-header" data-header>
+      <a class="brand" href="../../index.html" aria-label="Página inicial CineStream">
+        <span class="brand__mark">▶</span>
     <header class="site-header" data-header>
       <a class="brand" href="../../index.html" aria-label="Página inicial CineStream">
         <span class="brand__mark">C</span>
@@ -18,6 +26,11 @@
       <nav class="main-nav" aria-label="Navegação principal">
         <a href="../../index.html#popular">Populares</a>
         <a href="../../index.html#top-rated">Melhores</a>
+        <a href="favorites.html">Minha Lista</a>
+      </nav>
+      <form class="search" role="search" data-search-form>
+        <label class="sr-only" for="movie-search">Pesquisar filmes</label>
+        <input id="movie-search" data-search-input type="search" placeholder="Buscar filmes, sagas e novidades..." autocomplete="off" />
         <a href="favorites.html">Favoritos</a>
       </nav>
       <form class="search" role="search" data-search-form>

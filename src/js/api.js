@@ -11,6 +11,10 @@ export const imageSizes = {
 
 export const genreMap = new Map();
 
+/**
+ * Lê a API Key da URL ou do LocalStorage.
+ * A URL é útil para testar sem editar arquivos do projeto.
+ */
 export function getApiKey() {
   const params = new URLSearchParams(window.location.search);
   const keyFromUrl = params.get("api_key");
@@ -34,6 +38,9 @@ export function hasApiKey() {
   return Boolean(getApiKey());
 }
 
+/**
+ * Wrapper central do TMDB: adiciona API Key, idioma e mensagens de erro amigáveis.
+ */
 async function request(path, params = {}) {
   const apiKey = getApiKey();
   if (!apiKey) {
@@ -72,6 +79,7 @@ export const tmdb = {
   genres: () => request("/genre/movie/list"),
 };
 
+/** Carrega os gêneros uma única vez e mantém um cache em memória para os cards. */
 export async function loadGenres() {
   if (genreMap.size) return genreMap;
   const data = await tmdb.genres();
@@ -79,6 +87,7 @@ export async function loadGenres() {
   return genreMap;
 }
 
+/** Retorna a imagem do TMDB ou o placeholder local quando não há poster/backdrop. */
 export function imageUrl(path, size = imageSizes.poster) {
   if (!path) {
     return window.location.pathname.includes("/src/pages/") ? "../assets/images/placeholder.svg" : "src/assets/images/placeholder.svg";
@@ -127,6 +136,7 @@ export function isFavorite(movieId) {
   return getFavorites().some((movie) => Number(movie.id) === Number(movieId));
 }
 
+/** Alterna o filme no LocalStorage e retorna true quando ele foi adicionado. */
 export function toggleFavorite(movie) {
   const favorites = getFavorites();
   const exists = favorites.some((item) => Number(item.id) === Number(movie.id));
